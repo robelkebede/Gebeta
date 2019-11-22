@@ -1,5 +1,5 @@
-import random
 
+import random
 
 class Agent():
     def __init__(self,num):
@@ -8,13 +8,8 @@ class Agent():
     def action(self,player_id):
         #legal moves        
         if player_id==0:
-            return 0,random.randint(0,5)
+            return [0,random.randint(0,5)]
         else:
-            return 1,random.randint(0,5)
+            return [1,random.randint(0,5)]
 
 
-agent = Agent(2)
-
-id,x,y = agent.action(0)
-
-print(id)

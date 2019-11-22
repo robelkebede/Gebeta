@@ -96,4 +96,19 @@ def update_holes(player_id,pos_x,pos_y):
     print(player_id_score)
 
 
-update_holes(0,0,5)
+
+
+
+
+
+for i in range(1,10):
+    print(i%2)
+
+
+
+
+
+
+
+
+
