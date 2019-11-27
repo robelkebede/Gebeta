@@ -99,16 +99,3 @@ def update_holes(player_id,pos_x,pos_y):
 
 
 
-
-
-for i in range(1,10):
-    print(i%2)
-
-
-
-
-
-
-
-
-

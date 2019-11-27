@@ -11,6 +11,7 @@ Sessionx.vim
 
 # Temporary
 .netrwhist
+./__pycache__
 *~
 # Auto-generated tag files
 tags

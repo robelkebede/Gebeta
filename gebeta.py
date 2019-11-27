@@ -9,15 +9,12 @@ class Gebeta():
 
     def board(self):
         
-        #self.board_position = np.array([[4-3,4-3,4-3,4-3,4-3,4-3],[4-3,4-3,4-3,4-3,4-3,4-3]])
         self.board_position = np.array([[4,4,4,4,4,4],[4,4,4,4,4,4]])
         return self.board_position
 
-    def update(self,board):
-        self.board_position = board
-
     def moves(self,player_id):
 
+        #Legal moves
         moves1 = None
         final_move = []
         if player_id ==0:
@@ -49,7 +46,6 @@ class Gebeta():
         else:
             return False
 
-
     def start_pos(self,player_id,pos_x,pos_y):
         
         move = self.moves(player_id)
@@ -64,19 +60,18 @@ class Gebeta():
 
 
     def play(self,board_position,player_id,pos_x,pos_y,p0s=0,p1s=0):
-        #acesses denied when player is trying to acsses another position
-        #move starting point
+
         game_pos = self.start_pos(player_id,pos_x,pos_y)
         hole_value = board_position[game_pos[0][0],game_pos[0][1]]
         board_position[game_pos[0][0],game_pos[0][1]] = 0
 
-        #print([hole_value,board_position])
         num_iter = 0
 
         for i in range(1,10000):
             num_iter += 1 
             if hole_value == 0:
-                break #end game
+                #end game
+                break 
             
             if game_pos[i][0] == 9:
 
@@ -91,7 +86,7 @@ class Gebeta():
 
                 if hole_value == 1:
                     hole_value = board_position[game_pos[i][0],game_pos[i][1]] +1
-                    board_position[game_pos[i][0],game_pos[i][1]] =0
+                    board_position[game_pos[i][0],game_pos[i][1]] = 0
                 else:
                     board_position[game_pos[i][0],game_pos[i][1]] +=1
                     hole_value -= 1
@@ -99,69 +94,66 @@ class Gebeta():
         return  board_position,p0s,p1s,num_iter,game_pos
 
 
-    
-    
 def main():
 
     from agent import Agent
 
     ge = Gebeta()
-    board = ge.board()
-
-    s0 = 0
-    s1 = 0
-
     agent = Agent(2)
-    x=1
 
-    for i in range(10): #num of games 
+    board = ge.board()
+    Done = False
+    
+    p0s = 0
+    p1s = 0
 
-        while True: 
-            #player_input = input()
-            """ 
+    total_score_p0 = 0
+    total_score_p1 = 0
+    x=0
+
+    while not Done:
+
+
+        print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++") 
+        if x%2==0:
+            #AI
+
+            action = agent.neural_action(board)
+            board_position,p0s,p1s,num_iter,pos = ge.play(board,x%2,0,np.argmax(action))
+            print("action =>",np.argmax(action))
+            print(board_position)
+        else:
+            #HUMAN
+            player_input = input()
             board_position,p0s,p1s,num_iter,pos = ge.play(board,int(player_input[0]),
-                    int(player_input[1]),int(player_input[2]),s0,s1) """
+                int(player_input[1]),int(player_input[2])) 
+
+            print("action =>",player_input[2])
+            print(board_position)
+
+        
+        if x%2 == 0:
+            total_score_p0 += p0s
+        else:
+            score = p1s
+            total_score_p1 += p1s
+
+        print("Player 0={} Player 1={}".format(total_score_p0,total_score_p1)) 
+
+        print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++") 
+        
+        
+        board = board_position
+
+        if ge.end_game(board):
+            Done = True
+            print(" GAME_ENDED ")
+            board = ge.board()
+            break
+
+        x+=1
 
 
-            print("#######################################################################") 
-
-            action = agent.action(x%2)
-            board_position,p0s,p1s,num_iter,pos = ge.play(board,x%2,action[0],action[1])
-
-            s0 = p0s
-            s1 = p1s
-            #print("Player ",int(player_input[0])) 
-            #print("num Iter",num_iter)
-            #print("Pos",pos )
-            board = board_position
-
-            score = None
-            if x%2 == 0:
-                score = s0
-            else:
-                score = s1
-
-            print([board_position,x%2])
-            print("Score is {}".format(score))
-            print("num Iter {}".format(num_iter))
             
-            
-            ls0 = s0
-            ls1 = s1
-            
-            #print({"score player 0 ":ls0,"score player 1 ":ls1})
-
-            x+=1
-
-            if ge.end_game(board):
-                print("Game {} ended".format(i))
-                board = ge.board()
-                break
-
-            print("########################################################################")
-            
-
-
-
 if __name__ == "__main__":
     main()
