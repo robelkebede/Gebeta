@@ -19,7 +19,6 @@ def preprocesses(data):
     fea = np.array(feature)
     #one hot encoding [0,[0,0,0,0,0,1] (0,5)
     for t in target:
-        #tar.append(t)
         if t[1] == 0:
             tar.append([1,0,0,0,0,0])
         elif t[1] == 1:
@@ -32,7 +31,6 @@ def preprocesses(data):
             tar.append([0,0,0,0,1,0])
         elif t[1] == 5:
             tar.append([0,0,0,0,0,1])
-    
     fea = np.array(feature)
     tar = np.array(tar)
 
@@ -41,11 +39,14 @@ def preprocesses(data):
 
 def train():
     fea,target = preprocesses(data)
-    fea = np.array([i for i in fea.reshape(fea.shape[0],6*2)])
+    #fea = np.array([i for i in fea.reshape(fea.shape[0],6*2)])
+    #fea = np.array([i for i in fea.reshape(fea.shape[0],6*2)])
     target = np.array([i for i in target])
 
-    print(target)
-
+    for i in fea:
+        print(i)
+        print("THE END")
+        
     x_train,x_test,y_train,y_test = train_test_split(fea,target,test_size=0.2)
 
     network = MLPClassifier(early_stopping=False,hidden_layer_sizes=(100,),verbose=True)
@@ -55,7 +56,16 @@ def train():
     
     #joblib.dump(network,"./model/gebeta_model_1")
 
-    print(metrics.classification_report(predict,y_test))   
+    #print(metrics.classification_report(predict,y_test))   
+
+
+
+def q_learning():
+    pass
+
+def tree():
+    pass
+
 
 
 def main():

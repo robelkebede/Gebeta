@@ -1,3 +1,5 @@
+#! /usr/bin/env python3
+
 import numpy as np
 
 class Gebeta():
@@ -125,10 +127,9 @@ def main():
         else:
             #HUMAN
             player_input = input()
-            board_position,p0s,p1s,num_iter,pos = ge.play(board,int(player_input[0]),
-                int(player_input[1]),int(player_input[2])) 
+            board_position,p0s,p1s,num_iter,pos = ge.play(board,1,0,int(player_input[0])) 
 
-            print("action =>",player_input[2])
+            print("action =>",player_input[0])
             print(board_position)
 
         
@@ -154,6 +155,5 @@ def main():
         x+=1
 
 
-            
 if __name__ == "__main__":
     main()

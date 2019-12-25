@@ -9,9 +9,7 @@ class Agent():
         self.model = joblib.load("./model/gebeta_model_1")
 
     def action(self,player_id):
-        #legal moves        
-        #agent is 1 when you want to play with the AI
-       
+        
         if player_id==0:
             return [0,random.randint(0,5)]
         else:
