@@ -10,7 +10,7 @@ class Gebeta():
         self.board_position = None 
 
     def board(self):
-        
+                
         self.board_position = np.array([[4,4,4,4,4,4],[4,4,4,4,4,4]])
         return self.board_position
 
@@ -44,6 +44,7 @@ class Gebeta():
         p1 = all(0 ==i for i in board[1])
 
         if p0 or p1 == True:
+             
             return True
         else:
             return False
@@ -60,7 +61,7 @@ class Gebeta():
         move = move[start_:-1]
         return move
 
-
+    #step
     def play(self,board_position,player_id,pos_x,pos_y,p0s=0,p1s=0):
 
         game_pos = self.start_pos(player_id,pos_x,pos_y)

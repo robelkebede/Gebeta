@@ -1,4 +1,6 @@
 import numpy as np
+import time
+import tkinter as tk
 
 board_position = np.array([[4,4,4,4,4,4],
             [4,4,4,4,4,4]])
@@ -60,40 +62,128 @@ def start_pos(player_id,pos_x,pos_y):
     return move
 
 
+unit = 40
+m_h = 2
+m_w = 6
 
-def update_holes(player_id,pos_x,pos_y):
-    #acesses denied when player is trying to acsses another position
-    #move starting point
-    game_pos = start_pos(player_id,pos_x,pos_y)
-    #x = game_pos[0][0]
-    hole_value = board_position[game_pos[0][0],game_pos[0][1]]
-    board_position[game_pos[0][0],game_pos[0][1]] = 0
+class display(tk.Tk,object):
+
+    def __init__(self):
+        super(display,self).__init__()
+        self.action_space = [1,2,3,4,5,6]
+        self.num_actions = len(self.action_space)
+        self.n_features = 2
+        self.title('Gebeta')
+        self.geometry('{0}x{1}'.format(m_h * 120, m_w * unit))
+        self._build_maze()
 
 
-    # done for transition to the second player
-    player_id_score = 0
+    def _build_maze(self):
+        self.canvas = tk.Canvas(self, bg='white',
+                             height=m_h * unit,
+                             width=m_w * unit)
 
-    for i in range(1,10000):
         
-        #end game for player 1
-        if hole_value == 0:
-            break
-        
-        if game_pos[i][0] == 9:
-            player_id_score +=1
-            hole_value -=1
-        else:
-            if hole_value == 1:
-                hole_value = board_position[game_pos[i][0],game_pos[i][1]] +1
-                board_position[game_pos[i][0],game_pos[i][1]] =0
-            else:
-                print(hole_value)
-                board_position[game_pos[i][0],game_pos[i][1]] +=1
-                hole_value -= 1
+        for c in range(0, m_w * unit, unit):
+            x0, y0, x1, y1 = c, 0, c, m_h * unit
+            self.canvas.create_line(x0, y0, x1, y1)
+        for r in range(0, m_h * unit, unit):
+            x0, y0, x1, y1 = 0, r, m_w * unit, r
+            self.canvas.create_line(x0, y0, x1, y1)
+
+        origin = np.array([20, 20])
+
+        score0 = tk.Label(self, text="score0 is x ") # Create a text label
+        score0.pack(padx=20, pady=10) # Pack it into the window
+
+        score1 = tk.Label(self, text="score1 is x ") # Create a text label
+        score1.pack(padx=10, pady=0) # Pack it into the window
+
+        #change this into number
+
+        """ 
+        oval_center = origin + unit * 2
+        self.oval = self.canvas.create_oval(
+            oval_center[0] - 15, oval_center[1] - 15,
+            oval_center[0] + 15, oval_center[1] + 15,
+            fill='yellow')
+
+        """
+         # create oval
+        self.rect = self.canvas.create_rectangle(
+            origin[0] - 15, origin[1] - 15,
+            origin[0] + 15, origin[1] + 15,
+            fill='red')
+
+        # pack all
+        self.canvas.pack()
+
+
+
+    def reset(self):
+         self.update()
+         time.sleep(0.1)
+         self.canvas.delete(self.rect)
+         origin = np.array([20, 20])
+         #initial point
+         self.rect = self.canvas.create_rectangle(
+            origin[0] - 15, origin[1] - 15,
+            origin[0] + 15, origin[1] + 15,
+            fill='red')
+         # return observation
+         return (np.array(self.canvas.coords(self.rect)[:2]) - 
+              np.array(self.canvas.coords(self.oval)[:2]))/(    m_h*unit)
 
     
-    print(board_position)
-    print(player_id_score)
+    def step(self):
+        if action == 0:   # zero
+            if s[1] >unit :
+                base_action[1] -= unit
+        elif action == 1:   #one 
+            if s[1] < (m_h - 1) * unit:
+                base_action[1] += unit
+        elif action == 2:   # two
+            if s[0] < (m_w - 1) * unit:
+                base_action[0] += unit
+        elif action == 3:   # three
+            if s[0] > unit:
+                base_action[0] -= unit
+        elif action == 4:   # four
+            if s[0] > unit:
+                base_action[0] -= unit
+        elif action == 5:   # five
+            if s[0] > unit:
+                base_action[0] -= unit
+
+        
+        self.canvas.move(self.rect, base_action[0], base_action[1])  # move agent
+
+        next_coords = self.canvas.coords(self.rect)  # next state
+
+
+
+
+
+    
+    def render(self):
+        self.update()
+
+
+
+
+def main():
+    te = display()
+    for i in range(40):
+        te.reset()
+        for x in range(30):
+            te.render()
+
+
+if __name__ == "__main__":
+    main()
+
+
+
 
 
 
