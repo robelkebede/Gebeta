@@ -6,11 +6,13 @@ import numpy as np
 from gebeta import Gebeta
 from tqdm import tqdm
 from termcolor import colored
+import matplotlib.pyplot as plt
 
 class Agent():
     def __init__(self,num):
         self.num = num
         self.model = joblib.load("./model/gebeta_model_1")
+        self.rl_model = np.load("./data/data10000x.npy")
 
     def action(self,player_id):
         
@@ -18,6 +20,7 @@ class Agent():
             return [0,random.randint(0,5)]
         else:
             return [1,random.randint(0,5)]
+    
     def neural_action(self,action):
         predicted_action = self.model.predict(action.reshape(1,-1))
         #print(action)
@@ -36,7 +39,7 @@ class Agent():
         Q = np.zeros([observation_space,action_space])
         lr = 0.3
         y = .30 #what is this thing
-        num_ep = 10
+        num_ep = 10000
         r_list = []
         
         for i in range(num_ep):
@@ -58,12 +61,11 @@ class Agent():
                     #save action for player 0
                     #action
 
-                    print("s",s)
+                    print("AI_agent",s)
                     action = Q[s,:] + np.random.randn(1,action_space)*(1./(i+1))
 
                     a = np.argmax(action[:,0][0])
                     #a = a-1
-                    print(action[0])
                     print("Selected ",a)
                     print(action[:,0][0])
                     #print(a)
@@ -89,27 +91,41 @@ class Agent():
                     #takes random action from rl 
                     print("++++++++++++++++++++++++++++++++++++++++++")
                 else:
-                    s,r,_,_,_ = gebeta.play(board,1,0,self.action(j%2))   
-                    #takes random action from random() method
+                    print(s)
+
+                    action = np.random.randint(5)
+                    s1,_,r,_,_ = gebeta.play(s,1,0,action)
+
+                    print("Random",s1)
+                    print("action",action)
+                    print("reward",r)
+                    print("++++++++++++++++++++++++++++++++++++++++++")
+                    s = s1
 
                 j+=1
 
                 #board = s
 
-                if gebeta.end_game(board):
+                if gebeta.end_game(board) or j>60:
                     Done = True
                     board = gebeta.board()
-                    print(colored("GAME ENDED","red"),"who won ",i)
-                    time.sleep(0.5)
+                    print(colored("GAME ENDED","red"),"who won ",i,j)
+                    #time.sleep(0.5)
                     break
         
-        #print(gebeta.board())
         print(len(r_list))
-        import matplotlib.pyplot as plt
         plt.plot(r_list)
-        #np.save("data100",Q)
+        #np.save("data10000x",Q)
 
         plt.show() 
+    def play_rl(self,state):
+
+        action = self.rl_model[state] 
+        value = [np.argmax(i) for i in action[0]]
+        
+        return np.argmax(value)
+
+        
 
 
 if __name__ == "__main__":
@@ -117,6 +133,7 @@ if __name__ == "__main__":
     board_position = np.array([[4,4,4,4,4,4],[4,4,4,4,4,4]])
     a = Agent(2)
     gebeta = Gebeta()
-    a.rl(gebeta);
+    #a.rl(gebeta);
+    print(a.play_rl(board_position))
 
 

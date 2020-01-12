@@ -121,14 +121,15 @@ def main():
         if x%2==0:
             #AI
 
-            action = agent.neural_action(board)
-            board_position,p0s,p1s,num_iter,pos = ge.play(board,x%2,0,np.argmax(action))
-            print("action =>",np.argmax(action))
+            #action = agent.neural_action(board)
+            action = agent.play_rl(board)
+            board_position,p0s,p1s,num_iter,pos = ge.play(board,0,0,action)
+            print("action =>",action)
             print(board_position)
         else:
             #HUMAN
             player_input = input()
-            board_position,p0s,p1s,num_iter,pos = ge.play(board,1,0,int(player_input[0])) 
+            board_position,p0s,p1s,num_iter,pos = ge.play(board,1,1,int(player_input[0])) 
 
             print("action =>",player_input[0])
             print(board_position)
