@@ -61,7 +61,7 @@ class Gebeta():
         move = move[start_:-1]
         return move
 
-    #step
+    #   move
     def play(self,board_position,player_id,pos_x,pos_y,p0s=0,p1s=0):
 
         game_pos = self.start_pos(player_id,pos_x,pos_y)
@@ -115,7 +115,6 @@ def main():
     x=0
 
     while not Done:
-
 
         print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++") 
         if x%2==0:

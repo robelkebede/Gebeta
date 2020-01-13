@@ -19,7 +19,10 @@ state4 = np.array([[0,4,1,1,1,1],
                    [8,2,3,8,1,8]])
 
 
-print(state4)
+m = [1,4,34]
+print(data[m])
+
+exit()
 predicted = data[state4]
 
 value = [np.argmax(i) for i in predicted[0]]
