@@ -12,7 +12,7 @@
 
 ## Usage
 
-git clone http://github.com/something
+git clone http://github.com/robelkebede/gebeta.git
 
 cd ./gebeta	
 
