@@ -1,10 +1,9 @@
-import gym
+#import gym
 import numpy as np
 import random
 from keras.models import Sequential
 from keras.layers import Dense, Dropout
 from keras.optimizers import Adam
-
 from collections import deque
 
 class DQN:
@@ -28,8 +27,8 @@ class DQN:
         model   = Sequential()
         #state_shape  = self.env.observation_space.shape
         model.add(Dense(24, input_dim=1, activation="relu"))
-        model.add(Dense(48, activation="relu"))
-        model.add(Dense(24, activation="relu"))
+        model.add(Dense(8, activation="relu"))
+        model.add(Dense(16, activation="relu"))
         model.add(Dense(self.action_space))
         model.compile(loss="mean_squared_error",
             optimizer=Adam(lr=self.learning_rate))

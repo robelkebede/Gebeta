@@ -4,7 +4,7 @@ import random
 import joblib
 import numpy as np
 from gebeta import Gebeta
-from tqdm import tqdm
+#from tqdm import tqdm
 from termcolor import colored
 import matplotlib.pyplot as plt
 from dqn import DQN
@@ -21,7 +21,7 @@ class Agent():
         else:
             return [1,random.randint(0,5)]
     
-
+    # fix this shit
     def reward(self,r,j):
         if r == 0 :
             return -1
@@ -37,7 +37,7 @@ class Agent():
         action_space = 6
         Q = np.zeros([observation_space,action_space])
         lr = 0.8
-        y = .33#what is this thing
+        y = .33 
         num_ep = 500
         r_list = []
         
@@ -111,7 +111,7 @@ class Agent():
     def play_deep_rl(self,gebeta):
 
         print(DQN)
-        num_ep = 1
+        num_ep = 5
         r_list = []
         for i in range(num_ep):
 
@@ -130,27 +130,34 @@ class Agent():
 
                         action = dqn_agent.act(s)
 
-                        s1,r,_,_,_ = gebeta.play(s,0,0,a)
+                        s1,r,p1,_,_ = gebeta.play(s,0,0,a)
 
 
-                        reward = r if not Done else -20
-                        print(reward)
+                        r = self.reward(r,j)
+                        print(r)
                         new_state = s1.reshape(2,6)
                         dqn_agent.remember(s, action,r, s1, Done)
 
                         r_all+= r
 
-
                         r_list.append(r_all)
 
                         dqn_agent.replay()
                         dqn_agent.target_train()
+                        board = new_state
+
+                        print("AI",[r],s1,[p1])
+                        print("action",action)
+                        print("reward",r)
+                        print("#########################################")
+
 
 
                     else:
                         print(s)
                         action = np.random.randint(5)
                         s1,_,r,_,_ = gebeta.play(s,1,1,action)
+                        board = new_state
 
                         print("Random",s1)
                         print("action",action)
@@ -172,9 +179,6 @@ class Agent():
         #np.save("data100000x",Q)
         plt.show() 
 
-
-
-        
 
 
 if __name__ == "__main__":

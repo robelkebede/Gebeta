@@ -62,7 +62,10 @@ class Gebeta():
         return move
 
     #   move
-    def play(self,board_position,player_id,pos_x,pos_y,p0s=0,p1s=0):
+    def play(self,board_position,player_id,pos_x,pos_y):
+
+        p0s = 0
+        p1s = 0
 
         game_pos = self.start_pos(player_id,pos_x,pos_y)
         hole_value = board_position[game_pos[0][0],game_pos[0][1]]
@@ -80,9 +83,12 @@ class Gebeta():
 
                 if player_id == 0:
                     p0s += 1
+
+                    print("HELP")
                     hole_value -=1
                 else:
                     p1s += 1
+                    print("YELP")
                     hole_value -=1
 
             else:
