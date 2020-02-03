@@ -84,11 +84,9 @@ class Gebeta():
                 if player_id == 0:
                     p0s += 1
 
-                    print("HELP")
                     hole_value -=1
                 else:
                     p1s += 1
-                    print("YELP")
                     hole_value -=1
 
             else:

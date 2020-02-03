@@ -4,7 +4,6 @@ import random
 import joblib
 import numpy as np
 from gebeta import Gebeta
-#from tqdm import tqdm
 from termcolor import colored
 import matplotlib.pyplot as plt
 from dqn import DQN
@@ -26,19 +25,17 @@ class Agent():
         if r == 0 :
             return -1
         else:
-            if j >30:
-                #reward last actions more
-                return r + 4
             return r
-    
+
+
     def rl(self,gebeta):
         
         observation_space = 50
         action_space = 6
         Q = np.zeros([observation_space,action_space])
         lr = 0.8
-        y = .33 
-        num_ep = 500
+        y = .33#what is this thing
+        num_ep = 10
         r_list = []
         
         for i in range(num_ep):
@@ -87,19 +84,19 @@ class Agent():
 
                 j+=1
 
-
-            if gebeta.end_game(board) or j>60:
-                Done = True
-                board = gebeta.board()
-                print(colored("GAME ENDED","red"),"who won ",i,j)
-                #time.sleep(0.5)
-                break
-    
+                if gebeta.end_game(board) or j>60:
+                    Done = True
+                    board = gebeta.board()
+                    print(colored("GAME ENDED","red"),"who won ",i,j)
+                    #time.sleep(0.5)
+                    break
+        
         print(len(r_list))
         plt.plot(r_list)
         #np.save("data100000x",Q)
         plt.show() 
 
+   
     def play_rl(self,state):
 
         action = self.rl_model[state] 
@@ -110,8 +107,7 @@ class Agent():
 
     def play_deep_rl(self,gebeta):
 
-        print(DQN)
-        num_ep = 5
+        num_ep = 100
         r_list = []
         for i in range(num_ep):
 
@@ -119,12 +115,12 @@ class Agent():
                 j = 0
                 Done = False
                 board = gebeta.board()
+                dqn_agent = DQN()
 
                 while not Done:
 
                     s = board
 
-                    dqn_agent = DQN()
 
                     if j%2 == 0:
 
@@ -136,7 +132,7 @@ class Agent():
                         r = self.reward(r,j)
                         print(r)
                         new_state = s1.reshape(2,6)
-                        dqn_agent.remember(s, action,r, s1, Done)
+                        dqn_agent.remember(new_state, action,r, s1, Done)
 
                         r_all+= r
 
@@ -146,15 +142,13 @@ class Agent():
                         dqn_agent.target_train()
                         board = new_state
 
-                        print("AI",[r],s1,[p1])
+                        print("AI",new_state)
                         print("action",action)
                         print("reward",r)
                         print("#########################################")
 
 
-
                     else:
-                        print(s)
                         action = np.random.randint(5)
                         s1,_,r,_,_ = gebeta.play(s,1,1,action)
                         board = new_state

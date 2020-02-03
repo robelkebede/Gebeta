@@ -9,6 +9,7 @@ from agent import Agent
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 RED = (255, 0, 0)
+BLUE = (0, 0, 255)
  
 WIDTH = 50
 HEIGHT = 50
@@ -27,10 +28,6 @@ grid[1][1] =1
  
 pygame.init()
 
-#TODO score p0,p1 display on the screen
-#TODO num_itration
-#TODO legal and illagal moves
-#TODO tera (the main problem) (MAX_PRIORITY)
 
 screen = pygame.display.set_mode([350, 260])
 font = pygame.font.SysFont("Courier New", 24)
@@ -51,8 +48,8 @@ player_1 = 0
 
 score_0 =[]
 score_1 = []
-
-
+iter_ = 0
+act = None
 while not done:
 
        
@@ -61,43 +58,44 @@ while not done:
         if event.type == pygame.QUIT:  # If user clicked close
             done = True  # Flag that we are done so we exit this loop
 
-        
         elif event.type == pygame.MOUSEBUTTONDOWN:
             pos = pygame.mouse.get_pos()
             column = pos[0] // (WIDTH + MARGIN)
             row = pos[1] // (HEIGHT + MARGIN)
-            #how to 
             try:
-                                     
-                board_position,p0s,p1s,num_iter,pos = gebeta.play(grid,1,1,int(column)) 
-                print("in grid ",[p0s,p1s])
-
-                player_0+=p0s
-                score_0.append(p0s)
-                score_1.append(p1s)
-
-                grid = board_position
-
-                #THIS IS AI
-                time.sleep(1)
-                print("score 0 => ",p0s)
-                action = agent.play_rl(grid)
-                board_position,p0s,p1s,num_iter,pos = gebeta.play(grid,0,0,action)
-                player_1+=p1s
-
-                score_1.append(p1s)
-                score_0.append(p0s)
-
-                print("in grid ",[p0s,p1s])
                 
-                print("score 1 =>",p1s)
-                grid = board_position
+                #HUMAN PLAYER
+                if row == 1:
+                    board_position,p0s,p1s,num_iter,pos = gebeta.play(grid,1,1,int(column)) 
+                    print("in grid ",[row,column])
 
-                print("player_value ",[score_0,score_1])
-                print("player_final ",[sum(score_0),sum(score_1)])
+                    player_0+=p0s
+                    score_0.append(p0s)
+                    score_1.append(p1s)
 
+                    grid = board_position
 
-                
+                    iter_ = num_iter
+
+                    #THIS IS AI
+                    time.sleep(1)
+                    print("score 0 => ",p0s)
+                    action = agent.play_rl(grid)
+                    board_position,p0s,p1s,num_iter,pos = gebeta.play(grid,0,0,action)
+                    player_1+=p1s
+
+                    score_1.append(p1s)
+                    score_0.append(p0s)
+
+                    iter_ = num_iter
+                    act = action
+
+                    #LOGS
+                    grid = board_position
+                    print("scores ",[sum(score_0),sum(score_1)])
+                else:
+                    print("ILLAGAL MOVE")
+                    
             except IndexError:
                 pass
 
@@ -125,17 +123,19 @@ while not done:
             text = font.render(str(grid[row][column]), True, RED) 
             screen.blit(text, (rect.right-35, rect.top+10))
 
-            num_iter = font.render("num of iter : "+str(x), True, RED) 
+            num_iter = font.render("AI iter : "+str(iter_), True, BLUE) 
             screen.blit(num_iter, (10,150))
 
-            num_iter = font.render("player_0 : "+str(sum(score_0)), True, RED) 
+            num_iter = font.render("AI action : "+str(act), True, BLUE) 
+            screen.blit(num_iter, (10,170))
+
+
+            num_iter = font.render("AI score: "+str(sum(score_0)), True, BLUE) 
             screen.blit(num_iter, (10,190))
 
             num_iter = font.render("player_1 : "+str(sum(score_1)), True, RED) 
-            screen.blit(num_iter, (10,210))
+            screen.blit(num_iter, (10,220))
 
-
-    
      
  
     clock.tick(60)
