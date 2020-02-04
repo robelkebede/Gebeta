@@ -26,7 +26,7 @@ class DQN:
     def create_model(self):
         model   = Sequential()
         #state_shape  = self.env.observation_space.shape
-        model.add(Dense(24, input_dim=1, activation="relu"))
+        model.add(Dense(24, input_shape=(1,), activation="relu"))
         model.add(Dense(8, activation="relu"))
         model.add(Dense(16, activation="relu"))
         model.add(Dense(self.action_space,activation="sigmoid"))
@@ -35,15 +35,14 @@ class DQN:
         return model
 
     def act(self, state):
-        try:
-            self.epsilon *= self.epsilon_decay
-            self.epsilon = max(self.epsilon_min, self.epsilon)
-            if np.random.random() < self.epsilon:
-                #return self.env.action_space.sample()
-                return np.random.randint(1,6)
-            return np.argmax(self.model.predict(state)[0])
-        except ValueError:
-            print("this shit again")
+        self.epsilon *= self.epsilon_decay
+        self.epsilon = max(self.epsilon_min, self.epsilon)
+        if np.random.random() < self.epsilon:
+            return np.random.randint(6)
+
+        print("STATE SHAPE",state.reshape(-1).shape)
+        return np.argmax(self.model.predict(state.reshape(-1))[0])
+        
 
     def remember(self, state, action, reward, new_state, done):
         self.memory.append([state, action, reward, new_state, done])
@@ -56,13 +55,14 @@ class DQN:
         samples = random.sample(self.memory, batch_size)
         for sample in samples:
             state, action, reward, new_state, done = sample
-            target = self.target_model.predict(state)
+            target = self.target_model.predict(state.reshape(-1))
+            #target = 2
             if done:
                 target[0][action] = reward
             else:
-                Q_future = max(self.target_model.predict(new_state)[0])
+                Q_future = max(self.target_model.predict(new_state.reshape(-1))[0])
                 target[0][action] = reward + Q_future * self.gamma
-            self.model.fit(state, target, epochs=1, verbose=0)
+            self.model.fit(state.reshape(-1), target, epochs=1, verbose=0)
 
     def target_train(self):
         weights = self.model.get_weights()

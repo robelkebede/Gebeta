@@ -98,6 +98,7 @@ class Gebeta():
                     board_position[game_pos[i][0],game_pos[i][1]] +=1
                     hole_value -= 1
 
+
         return  board_position,p0s,p1s,num_iter,game_pos
 
 

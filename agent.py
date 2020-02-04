@@ -25,6 +25,8 @@ class Agent():
         if r == 0 :
             return -1
         else:
+            if j>30:
+                return 10
             return r
 
 
@@ -107,32 +109,32 @@ class Agent():
 
     def play_deep_rl(self,gebeta):
 
-        num_ep = 100
+        num_ep = 10
         r_list = []
+        dqn_agent = DQN()
         for i in range(num_ep):
 
                 r_all = 0 #reward (ALL)
                 j = 0
                 Done = False
                 board = gebeta.board()
-                dqn_agent = DQN()
 
                 while not Done:
 
                     s = board
 
-
                     if j%2 == 0:
 
-                        action = dqn_agent.act(s)
 
-                        s1,r,p1,_,_ = gebeta.play(s,0,0,a)
+                        a = dqn_agent.act(s)
 
+                        print(s)
+                        s1,r,p1,it,pos = gebeta.play(s,0,0,a)
 
                         r = self.reward(r,j)
                         print(r)
-                        new_state = s1.reshape(2,6)
-                        dqn_agent.remember(new_state, action,r, s1, Done)
+                        new_state = s1
+                        dqn_agent.remember(new_state, a,r, s1, Done)
 
                         r_all+= r
 
@@ -143,13 +145,15 @@ class Agent():
                         board = new_state
 
                         print("AI",new_state)
-                        print("action",action)
+                        print("iter",it)
+                        #print("pos",pos)
+                        print("action",a)
                         print("reward",r)
                         print("#########################################")
 
 
                     else:
-                        action = np.random.randint(5)
+                        action = np.random.randint(6)
                         s1,_,r,_,_ = gebeta.play(s,1,1,action)
                         board = new_state
 
@@ -160,6 +164,7 @@ class Agent():
                         s = s1
 
                     j+=1
+
 
                     if gebeta.end_game(board) or j>60:
                         Done = True
