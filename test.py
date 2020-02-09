@@ -2,12 +2,25 @@ import numpy as np
 import time
 import tkinter as tk
 from tkinter import ttk
+from keras.models import load_model
 
-board_position = np.array([[4,4,4,4,4,4],
-            [4,4,4,4,4,4]])
+board_position = np.array([[4,0,0,4,4,0],
+                            [4,4,4,4,4,4]])
 
+
+board = board_position 
 p0_score = 0
 p1_score = 0
+
+model = load_model("deep")
+
+pre = model.predict(board.reshape(12,))[0]
+
+print(pre)
+print(np.argmax(pre))
+
+
+exit()
 
 def counter_clockwise():
 

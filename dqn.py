@@ -14,8 +14,8 @@ class DQN:
         self.gamma = 0.85
         self.epsilon = 1.0
         self.epsilon_min = 0.01
-        self.epsilon_decay = 0.995
-        self.learning_rate = 0.005
+        self.epsilon_decay = 0.2
+        self.learning_rate = 0.01
         self.tau = .125
         self.action_space = 6
 
@@ -26,8 +26,7 @@ class DQN:
     def create_model(self):
         model   = Sequential()
         #state_shape  = self.env.observation_space.shape
-        model.add(Dense(24, input_shape=(1,), activation="relu"))
-        model.add(Dense(8, activation="relu"))
+        model.add(Dense(24, input_shape=(12,), activation="relu"))
         model.add(Dense(16, activation="relu"))
         model.add(Dense(self.action_space,activation="sigmoid"))
         model.compile(loss="mean_squared_error",
@@ -40,8 +39,8 @@ class DQN:
         if np.random.random() < self.epsilon:
             return np.random.randint(6)
 
-        print("STATE SHAPE",state.reshape(-1).shape)
-        return np.argmax(self.model.predict(state.reshape(-1))[0])
+        print("STATE SHAPE",state.reshape(1,12).shape)
+        return np.argmax(self.model.predict(state.reshape((1,12)))[0])
         
 
     def remember(self, state, action, reward, new_state, done):
@@ -55,14 +54,14 @@ class DQN:
         samples = random.sample(self.memory, batch_size)
         for sample in samples:
             state, action, reward, new_state, done = sample
-            target = self.target_model.predict(state.reshape(-1))
+            target = self.target_model.predict(state.reshape((1,12)))
             #target = 2
             if done:
                 target[0][action] = reward
             else:
-                Q_future = max(self.target_model.predict(new_state.reshape(-1))[0])
+                Q_future = max(self.target_model.predict(new_state.reshape((1,12)))[0])
                 target[0][action] = reward + Q_future * self.gamma
-            self.model.fit(state.reshape(-1), target, epochs=1, verbose=0)
+            self.model.fit(state.reshape((1,12)), target, epochs=1, verbose=0)
 
     def target_train(self):
         weights = self.model.get_weights()

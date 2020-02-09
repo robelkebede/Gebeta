@@ -109,8 +109,9 @@ class Agent():
 
     def play_deep_rl(self,gebeta):
 
-        num_ep = 10
+        num_ep = 100
         r_list = []
+        me = []
         dqn_agent = DQN()
         for i in range(num_ep):
 
@@ -175,6 +176,9 @@ class Agent():
 
         print(len(r_list))
         plt.plot(r_list)
+        dqn_agent.save_model("./models/deep_1000.h5")
+        loss = dqn_agent.model
+        print(loss.summary())
         #np.save("data100000x",Q)
         plt.show() 
 
@@ -183,11 +187,8 @@ class Agent():
 if __name__ == "__main__":
     
     board_position = np.array([[4,4,4,4,4,4],[4,4,4,4,4,4]])
-    a = Agent(2)
+    agent = Agent(2)
     gebeta = Gebeta()
-    #a.rl(gebeta)
-    #print(a.play_rl(board_position))
-
-    a.play_deep_rl(gebeta) 
-
-
+    
+    #self play deep RL
+    agent.play_deep_rl(gebeta) 

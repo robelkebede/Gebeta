@@ -51,7 +51,6 @@ score_1 = []
 iter_ = 0
 act = None
 while not done:
-
        
     for event in pygame.event.get():  # User did something
         print(grid) 
@@ -130,10 +129,10 @@ while not done:
             screen.blit(num_iter, (10,170))
 
 
-            num_iter = font.render("AI score: "+str(sum(score_0)), True, BLUE) 
+            num_iter = font.render("AI score: "+str([sum(score_0)]), True, BLUE) 
             screen.blit(num_iter, (10,190))
 
-            num_iter = font.render("player_1 : "+str(sum(score_1)), True, RED) 
+            num_iter = font.render("player_1: "+str([sum(score_1)]), True, RED) 
             screen.blit(num_iter, (10,220))
 
      
