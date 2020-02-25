@@ -5,17 +5,19 @@ from keras.models import Sequential
 from keras.layers import Dense, Dropout
 from keras.optimizers import Adam
 from collections import deque
+from keras.models import load_model 
+import random
 
 class DQN:
     def __init__(self):
         
         self.memory  = deque(maxlen=2000)
         
-        self.gamma = 0.85
-        self.epsilon = 1.0
+        self.gamma = 0.90
+        self.epsilon = 0.5
         self.epsilon_min = 0.01
         self.epsilon_decay = 0.2
-        self.learning_rate = 0.01
+        self.learning_rate = 0.1
         self.tau = .125
         self.action_space = 6
 
@@ -34,12 +36,11 @@ class DQN:
         return model
 
     def act(self, state):
-        self.epsilon *= self.epsilon_decay
-        self.epsilon = max(self.epsilon_min, self.epsilon)
-        if np.random.random() < self.epsilon:
+        #self.epsilon *= self.epsilon_decay
+        #self.epsilon = max(self.epsilon_min, self.epsilon)
+        if random.uniform(0,1) < self.epsilon:
             return np.random.randint(6)
 
-        print("STATE SHAPE",state.reshape(1,12).shape)
         return np.argmax(self.model.predict(state.reshape((1,12)))[0])
         
 
@@ -72,6 +73,11 @@ class DQN:
 
     def save_model(self, fn):
         self.model.save(fn)
+
+    def predict(self,state):
+        model = load_model("./models/model_v2.h5")
+        return np.argmax(model.predict(state.reshape((1,12)))[0])
+
 
 def main():
     observation_space = 50

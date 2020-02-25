@@ -9,7 +9,6 @@
 ## TODO
 
 * better reinforcement learning model
-* better README (pic board,loss graph )
 
 
 [RULES] ("https://www.youtube.com/watch?v=c62_xn8XC2g")
@@ -23,13 +22,21 @@ pip install -r requirements.txt
 ```
 
 
-
 ```bash 
 cd ./gebeta	
 
 python3 grid.py
 
 ```
+
+## Screenshot
+![Alt text](./screenshot.png?raw=true "game")
+
+
+
+## Game Score
+![Alt text](./score.png?raw=true "Score")
+
 ## Contributing
 
 Pull requests are welcome

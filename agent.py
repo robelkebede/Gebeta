@@ -30,7 +30,7 @@ class Agent():
             return r
 
 
-    def rl(self,gebeta):
+    def q_table(self,gebeta):
         
         observation_space = 50
         action_space = 6
@@ -99,15 +99,18 @@ class Agent():
         plt.show() 
 
    
-    def play_rl(self,state):
+    def play_q_table(self,state):
 
         action = self.rl_model[state] 
         value = [np.argmax(i) for i in action[0]]
         
         return np.argmax(value)
 
+    def play_deep(self,state):
+        dqn = DQN()      
+        return dqn.predict(state)
 
-    def play_deep_rl(self,gebeta):
+    def deep_rl(self,gebeta):
 
         num_ep = 100
         r_list = []
@@ -129,11 +132,11 @@ class Agent():
 
                         a = dqn_agent.act(s)
 
-                        print(s)
+                        #print(s)
                         s1,r,p1,it,pos = gebeta.play(s,0,0,a)
 
                         r = self.reward(r,j)
-                        print(r)
+                        #print(r)
                         new_state = s1
                         dqn_agent.remember(new_state, a,r, s1, Done)
 
@@ -145,43 +148,25 @@ class Agent():
                         dqn_agent.target_train()
                         board = new_state
 
-                        print("AI",new_state)
-                        print("iter",it)
-                        #print("pos",pos)
-                        print("action",a)
-                        print("reward",r)
-                        print("#########################################")
-
-
+                        
                     else:
                         action = np.random.randint(6)
                         s1,_,r,_,_ = gebeta.play(s,1,1,action)
                         board = new_state
-
-                        print("Random",s1)
-                        print("action",action)
-                        print("reward",r)
-                        print("++++++++++++++++++++++++++++++++++++++++++")
                         s = s1
 
                     j+=1
-
 
                     if gebeta.end_game(board) or j>60:
                         Done = True
                         board = gebeta.board()
                         print(colored("GAME ENDED","red"),"who won ",i,j)
-                        #time.sleep(0.5)
                         break
 
         print(len(r_list))
         plt.plot(r_list)
-        dqn_agent.save_model("./models/deep_1000.h5")
-        loss = dqn_agent.model
-        print(loss.summary())
-        #np.save("data100000x",Q)
+        #dqn_agent.save_model("./models/model_v2.h5")
         plt.show() 
-
 
 
 if __name__ == "__main__":
@@ -189,6 +174,5 @@ if __name__ == "__main__":
     board_position = np.array([[4,4,4,4,4,4],[4,4,4,4,4,4]])
     agent = Agent(2)
     gebeta = Gebeta()
-    
-    #self play deep RL
-    agent.play_deep_rl(gebeta) 
+    #self play
+    agent.deep_rl(gebeta) 
