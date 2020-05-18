@@ -3,12 +3,13 @@
 
 * train a reinforcement learning agent to play Gebeta or Mancala
 * pygame gui for the Board (DONE)
+* self play (random) (DONE)
 * deep reinforcement learning and Q table implementation (DONE)
 
 
 ## TODO
 
-* better reinforcement learning model
+* better function approximator
 
 
 [RULES] ("https://www.youtube.com/watch?v=c62_xn8XC2g")
