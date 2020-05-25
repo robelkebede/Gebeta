@@ -35,7 +35,7 @@ python3 grid.py
 
 
 
-## Game Score (CPU)
+## Game Score (500 GAMES)
 ![Alt text](./score.png?raw=true "Score")
 
 ## Contributing
