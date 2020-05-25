@@ -1,14 +1,14 @@
 
 # Gebeta-ገበጣ
 
-* train a reinforcement learning agent to play Gebeta or Mancala
-* pygame gui for the Board (DONE)
-* self play (random) (DONE)
-* deep reinforcement learning and Q table implementation (DONE)
+Gabata (also spelled "Gebeta") is the generic term for mancala games played in Ethiopia and Eritrea. It is used for many two-row games, but also for several three-rank mancala games.i devloped a reinforcement learning agent to play with itself and learns how to play gebeta
 
 
 ## TODO
 
+* pygame gui for the Board (DONE)
+* self play (random) (DONE)
+* deep reinforcement learning and Q table implementation (DONE)
 * better function approximator
 
 
@@ -35,7 +35,7 @@ python3 grid.py
 
 
 
-## Game Score
+## Game Score (CPU)
 ![Alt text](./score.png?raw=true "Score")
 
 ## Contributing

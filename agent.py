@@ -29,7 +29,7 @@ class Agent():
                 return 10
             return r
 
-
+    """
     def q_table(self,gebeta):
         
         observation_space = 50
@@ -110,6 +110,7 @@ class Agent():
         value = [np.argmax(i) for i in action[0]]
         
         return np.argmax(value)
+    """
 
     def play_deep(self,state):
         dqn = DQN()      

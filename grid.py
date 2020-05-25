@@ -80,8 +80,8 @@ while not done:
                     #THIS IS AI
                     time.sleep(1)
                     #print("score 0 => ",p0s)
-                    action = agent.play_q_table(grid)
-                    #action = agent.play_deep(grid)
+                    #action = agent.play_q_table(grid)
+                    action = agent.play_deep(grid)
                     board_position,p0s,p1s,num_iter,pos = gebeta.play(grid,0,0,action)
                     player_1+=p1s
 
