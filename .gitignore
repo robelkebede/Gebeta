@@ -14,7 +14,7 @@ Sessionx.vim
 ./data
 
 
-__pycache__/
+__pycache__
 *~
 # Auto-generated tag files
 tags

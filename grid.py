@@ -21,7 +21,7 @@ for row in range(2):
     for column in range(6):
         grid[row].append(0) 
  
-#numpy array and chenge values for test
+#numpy array and change values for test
 grid = np.array(grid)
 grid[0][0] = 4
 grid[1][1] =1
@@ -52,10 +52,9 @@ iter_ = 0
 act = None
 while not done:
        
-    for event in pygame.event.get():  # User did something
-        print(grid) 
-        if event.type == pygame.QUIT:  # If user clicked close
-            done = True  # Flag that we are done so we exit this loop
+    for event in pygame.event.get():  
+        if event.type == pygame.QUIT:  
+            done = True  
 
         elif event.type == pygame.MOUSEBUTTONDOWN:
             pos = pygame.mouse.get_pos()
@@ -64,6 +63,8 @@ while not done:
             try:
                 
                 #HUMAN PLAYER
+
+                print(grid) 
                 if row == 1:
                     board_position,p0s,p1s,num_iter,pos = gebeta.play(grid,1,1,int(column)) 
                     print("in grid ",[row,column])
@@ -78,7 +79,7 @@ while not done:
 
                     #THIS IS AI
                     time.sleep(1)
-                    print("score 0 => ",p0s)
+                    #print("score 0 => ",p0s)
                     action = agent.play_q_table(grid)
                     #action = agent.play_deep(grid)
                     board_position,p0s,p1s,num_iter,pos = gebeta.play(grid,0,0,action)

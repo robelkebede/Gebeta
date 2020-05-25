@@ -35,10 +35,13 @@ class Agent():
         observation_space = 50
         action_space = 6
         Q = np.zeros([observation_space,action_space])
-        lr = 0.8
-        y = .33#what is this thing
-        num_ep = 10
+        lr = .8
+        y = .95
+        num_ep = 500
         r_list = []
+
+        print(Q.shape)
+        exit()
         
         for i in range(num_ep):
 
@@ -52,18 +55,20 @@ class Agent():
                 s = board
 
                 if j%2 == 0:
-                    print("AI_agent",s)
+                    #print("AI_agent",s)
                     action = Q[s,:] + np.random.randn(1,action_space)*(1./(i+1))
+
+                    print(action.shape)
 
                     a = np.argmax(action[:,0][0])
                     
-                    print("Selected ",a)
-                    print(action[:,0][0])
+                    #print("Selected ",action)
+                    #print(action[:,0][0])
 
                     s1,r,_,_,_ = gebeta.play(s,0,0,a)
                     
                     r = self.reward(r,j)
-                    print("reward",r)
+                    #print("reward",r)
                     
                     Q[s,a] = Q[s,a] + lr*(r + y*np.max(Q[s1,:]) - Q[s,a])
 
@@ -72,16 +77,16 @@ class Agent():
 
                     r_list.append(r_all)
 
-                    print("++++++++++++++++++++++++++++++++++++++++++")
+                    #print("++++++++++++++++++++++++++++++++++++++++++")
                 else:
-                    print(s)
+                    #print(s)
                     action = np.random.randint(5)
                     s1,_,r,_,_ = gebeta.play(s,1,1,action)
 
-                    print("Random",s1)
-                    print("action",action)
-                    print("reward",r)
-                    print("++++++++++++++++++++++++++++++++++++++++++")
+                    #print("Random",s1)
+                    #print("action",action)
+                    #print("reward",r)
+                    #print("++++++++++++++++++++++++++++++++++++++++++")
                     s = s1
 
                 j+=1
@@ -95,7 +100,7 @@ class Agent():
         
         print(len(r_list))
         plt.plot(r_list)
-        #np.save("data100000x",Q)
+        np.save("data100000m",Q)
         plt.show() 
 
    
@@ -112,7 +117,7 @@ class Agent():
 
     def deep_rl(self,gebeta):
 
-        num_ep = 100
+        num_ep = 500
         r_list = []
         me = []
         dqn_agent = DQN()
@@ -165,7 +170,8 @@ class Agent():
 
         print(len(r_list))
         plt.plot(r_list)
-        #dqn_agent.save_model("./models/model_v2.h5")
+        np.save("reward_500.npy",r_list)
+        dqn_agent.save_model("./models/model_new_v1.h5")
         plt.show() 
 
 
@@ -174,5 +180,4 @@ if __name__ == "__main__":
     board_position = np.array([[4,4,4,4,4,4],[4,4,4,4,4,4]])
     agent = Agent(2)
     gebeta = Gebeta()
-    #self play
-    agent.deep_rl(gebeta) 
+    agent.deep_rl(gebeta)

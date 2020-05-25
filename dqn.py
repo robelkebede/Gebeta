@@ -17,9 +17,10 @@ class DQN:
         self.epsilon = 0.5
         self.epsilon_min = 0.01
         self.epsilon_decay = 0.2
-        self.learning_rate = 0.1
+        self.learning_rate = 0.001
         self.tau = .125
         self.action_space = 6
+        self.model = load_model("./models/model_v2.h5")
 
         self.model = self.create_model()
         self.target_model = self.create_model()
@@ -27,10 +28,10 @@ class DQN:
 
     def create_model(self):
         model   = Sequential()
-        #state_shape  = self.env.observation_space.shape
-        model.add(Dense(24, input_shape=(12,), activation="relu"))
+        model.add(Dense(8, input_shape=(12,), activation="relu"))
         model.add(Dense(16, activation="relu"))
-        model.add(Dense(self.action_space,activation="sigmoid"))
+        model.add(Dense(32, activation="relu"))
+        model.add(Dense(self.action_space,activation="linear"))
         model.compile(loss="mean_squared_error",
             optimizer=Adam(lr=self.learning_rate))
         return model
@@ -75,8 +76,7 @@ class DQN:
         self.model.save(fn)
 
     def predict(self,state):
-        model = load_model("./models/model_v2.h5")
-        return np.argmax(model.predict(state.reshape((1,12)))[0])
+        return np.argmax(self.model.predict(state.reshape((1,12)))[0])
 
 
 def main():

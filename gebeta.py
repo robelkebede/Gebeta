@@ -30,6 +30,7 @@ class Gebeta():
                     [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 5],[9,9]]
 
         done = 0
+        #use generators insted of lists
         while done<5000:
                 for m in moves1:
                     final_move.append(m)
@@ -37,18 +38,16 @@ class Gebeta():
 
         return final_move
 
-
     def end_game(self,board):
 
         p0 = all(0 ==i for i in board[0])
         p1 = all(0 ==i for i in board[1])
 
         if p0 or p1 == True:
-             
             return True
         else:
             return False
-
+    
     def start_pos(self,player_id,pos_x,pos_y):
         
         move = self.moves(player_id)
@@ -72,7 +71,8 @@ class Gebeta():
         board_position[game_pos[0][0],game_pos[0][1]] = 0
 
         num_iter = 0
-
+        
+        #use while insted of for loop
         for i in range(1,10000):
             num_iter += 1 
             if hole_value == 0:
