@@ -10,6 +10,7 @@ Gabata (also spelled "Gebeta") is the generic term for mancala games played in E
 * self play (random) (DONE)
 * deep reinforcement learning and Q table implementation (DONE)
 * better function approximator
+* muZero implementaion
 
 
 [RULES] ("https://www.youtube.com/watch?v=c62_xn8XC2g")
