@@ -1,7 +1,7 @@
 
 # Gebeta-ገበጣ
 
-Gabata (also spelled "Gebeta") is the generic term for mancala games played in Ethiopia and Eritrea. It is used for many two-row games, but also for several three-rank mancala games.i devloped a reinforcement learning agent to play with itself and learns how to play gebeta
+Gabata (also spelled "Gebeta") is the generic term for mancala games played in Ethiopia and Eritrea. It is used for many two-row games, but also for several three-rank mancala games.i devloped a reinforcement learning agent that play with itself and learns how to play gebeta
 
 
 ## TODO
