@@ -121,12 +121,12 @@ class Agent():
     def deep_rl(self,gebeta):
 
         parser = argparse.ArgumentParser()
-        parser.add_argument('--epsodes',type=int
-              ,help='number of epsodes'
+        parser.add_argument('--episodes',type=int
+              ,help='number of episodes'
               ,default=10)
  
         args = parser.parse_args()
-        print("EPSODES ",args.epsodes)
+        print("EPISODES ",args.episodes)
 
         num_ep = args.epsodes
         r_list = []
