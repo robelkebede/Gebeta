@@ -1,3 +1,4 @@
+#! /usr/bin/env python
 
 import time
 import random
@@ -7,6 +8,7 @@ from gebeta import Gebeta
 from termcolor import colored
 import matplotlib.pyplot as plt
 from dqn import DQN
+import argparse
 
 class Agent():
     def __init__(self,num):
@@ -118,7 +120,15 @@ class Agent():
 
     def deep_rl(self,gebeta):
 
-        num_ep = 500
+        parser = argparse.ArgumentParser()
+        parser.add_argument('--epsodes',type=int
+              ,help='number of epsodes'
+              ,default=10)
+ 
+        args = parser.parse_args()
+        print("EPSODES ",args.epsodes)
+
+        num_ep = args.epsodes
         r_list = []
         me = []
         dqn_agent = DQN()
@@ -171,7 +181,7 @@ class Agent():
 
         print(len(r_list))
         plt.plot(r_list)
-        np.save("reward_500.npy",r_list)
+        #np.save("reward_500.npy",r_list)
         dqn_agent.save_model("./models/model_new_v1.h5")
         plt.show() 
 

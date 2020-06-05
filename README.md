@@ -27,7 +27,14 @@ pip install -r requirements.txt
 ```bash 
 cd ./gebeta	
 
-python3 grid.py
+./grid.py
+
+```
+
+## Self Play
+```bash 
+cd ./gebeta	
+./agent.py --epsodes=[NUM_EPSODES]
 
 ```
 
