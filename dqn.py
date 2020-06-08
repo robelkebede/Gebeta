@@ -37,8 +37,8 @@ class DQN:
         return model
 
     def act(self, state):
-        #self.epsilon *= self.epsilon_decay
-        #self.epsilon = max(self.epsilon_min, self.epsilon)
+        self.epsilon *= self.epsilon_decay
+        self.epsilon = max(self.epsilon_min, self.epsilon)
         if random.uniform(0,1) < self.epsilon:
             return np.random.randint(6)
 
