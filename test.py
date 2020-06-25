@@ -6,15 +6,13 @@ def smooth(y,box_pts):
     y_smooth = np.convolve(y,box,mode='same')
     return y_smooth
 
-y = np.load("reward.npy")
+y = np.load("reward_torch.npy")
 x = [i for i in range(len(y))]
-
-y_ = smooth(y,25)
+#y_ = smooth(y,25)
 
 plt.xlabel('number of moves in the game')
 plt.ylabel('score')
-
 plt.plot(x,y)
-plt.plot(x,y_,color="red")
+#plt.plot(x,y_,color="red")
 plt.show()
 
