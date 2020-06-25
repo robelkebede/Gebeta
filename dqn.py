@@ -62,6 +62,8 @@ class DQN:
                 target[0][action] = reward
             else:
                 Q_future = max(self.target_model.predict(new_state.reshape((1,12)))[0])
+                print("TARGET",target[0])
+                print("action",action)
                 target[0][action] = reward + Q_future * self.gamma
             self.model.fit(state.reshape((1,12)), target, epochs=1, verbose=0)
 

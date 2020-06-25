@@ -7,8 +7,13 @@ import numpy as np
 from gebeta import Gebeta
 from termcolor import colored
 import matplotlib.pyplot as plt
-from dqn import DQN
+#from dqn import DQN
+from torch_dqn.agent import Agent
 import argparse
+
+np.random.seed(0)
+agent_torch = Agent(state_size=12, action_size=6, seed=0)
+
 
 class Agent():
     def __init__(self,num):
@@ -30,7 +35,6 @@ class Agent():
             if j>30:
                 return 10
             return r
-
     
     def play_deep(self,state):
         dqn = DQN()      
@@ -48,7 +52,10 @@ class Agent():
 
         num_ep = args.episodes
         r_list = []
-        dqn_agent = DQN()
+        #dqn_agent = DQN()
+        eps_start =1.0
+        eps_end=0.01
+        eps = eps_start
         for i in range(num_ep):
 
                 r_all = 0 #reward (ALL)
@@ -59,47 +66,39 @@ class Agent():
                 while not Done:
 
                     s = board
-
+                    #self play
                     if j%2 == 0:
 
-                        a = dqn_agent.act(s)
-
-                        #print(s)
+                        a = agent_torch.act(s.reshape(-1), eps)
                         s1,r,p1,it,pos = gebeta.play(s,0,0,a)
-
-                        r = self.reward(r,j)
-                        #print(r)
-                        new_state = s1
-                        dqn_agent.remember(new_state, a,r, s1, Done)
-
-                        r_list.append(r_all)
+                        #r = self.reward(r,j)
+                        agent_torch.step(s.reshape(-1), a, r, s1.reshape(-1),Done)
+                        s = s1
+                        #print("next state ",s1)
                         r_all+= r
-
-
-                        dqn_agent.replay()
-                        dqn_agent.target_train()
-                        board = new_state
-
+                        board = s1
                         
                     else:
                         action = np.random.randint(6)
                         s1,_,r,_,_ = gebeta.play(s,1,1,action)
-                        board = new_state
+                        board = s1
                         s = s1
 
                     j+=1
-
+                    eps = max(eps_end, 0.99*eps)
 
                     if gebeta.end_game(board) or j>60:
                         Done = True
                         board = gebeta.board()
-                        print(colored("GAME ENDED","red"),"who won ",i,j)
+                        print(colored("GAME ENDED","red"),i)
                         break
+
+                r_list.append(r_all)
 
         print(len(r_list))
         plt.plot(r_list)
-        #np.save("reward_500.npy",r_list)
-        #dqn_agent.save_model("./models/model_new_v1.h5")
+        np.save("reward_torch.npy",r_list)
+        dqn_agent.save_model("./models/model.h5")
         plt.show() 
 
 

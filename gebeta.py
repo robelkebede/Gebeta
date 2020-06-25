@@ -126,7 +126,8 @@ def main():
             #AI
 
             #action = agent.neural_action(board)
-            action = agent.play_rl(board)
+            #action = agent.play_rl(board)
+            action=1
             board_position,p0s,p1s,num_iter,pos = ge.play(board,0,0,action)
             print("action =>",action)
             print(board_position)
