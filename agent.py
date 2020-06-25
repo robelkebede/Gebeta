@@ -2,6 +2,7 @@
 
 import time
 import random
+import torch
 import joblib
 import numpy as np
 from gebeta import Gebeta
@@ -14,11 +15,11 @@ import argparse
 np.random.seed(0)
 agent_torch = Agent(state_size=12, action_size=6, seed=0)
 
-
 class Agent():
     def __init__(self,num):
         self.num = num
-        self.rl_model = np.load("./data/data10000x.npy")
+        #self.model = agent_torch.qnetwork_local.load_state_dict(torch.load('checkpoint.pth'))
+        self.model = None
 
     def action(self,player_id):
         
@@ -37,8 +38,8 @@ class Agent():
             return r
     
     def play_deep(self,state):
-        dqn = DQN()      
-        return dqn.predict(state)
+        action = agent_torch.act(state)
+        return action
 
     def deep_rl(self,gebeta):
 
@@ -97,8 +98,8 @@ class Agent():
 
         print(len(r_list))
         plt.plot(r_list)
+        torch.save(agent_torch.qnetwork_local.state_dict(), './models/model.pth')
         np.save("reward_torch.npy",r_list)
-        dqn_agent.save_model("./models/model.h5")
         plt.show() 
 
 
