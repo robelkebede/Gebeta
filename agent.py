@@ -10,6 +10,7 @@ from termcolor import colored
 import matplotlib.pyplot as plt
 #from dqn import DQN
 from torch_dqn.agent import Agent
+#from torch_dqn.Tensor.agent import Agent
 import argparse
 
 np.random.seed(0)

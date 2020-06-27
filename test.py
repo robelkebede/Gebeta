@@ -8,11 +8,12 @@ def smooth(y,box_pts):
 
 y = np.load("reward_torch.npy")
 x = [i for i in range(len(y))]
-#y_ = smooth(y,25)
+y_ = smooth(y,25)
+
 
 plt.xlabel('number of moves in the game')
 plt.ylabel('score')
 plt.plot(x,y)
-#plt.plot(x,y_,color="red")
+plt.plot(x[:-24],y_[:-24],color="red")
 plt.show()
 
