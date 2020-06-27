@@ -44,7 +44,7 @@ cd ./gebeta
 
 
 ## Game Score (500 GAMES)
-![Alt text](./score2.png?raw=true "Score")
+![Alt text](./score.png?raw=true "Score")
 
 ## Contributing
 
