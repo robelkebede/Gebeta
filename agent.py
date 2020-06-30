@@ -9,8 +9,8 @@ from gebeta import Gebeta
 from termcolor import colored
 import matplotlib.pyplot as plt
 #from dqn import DQN
-from torch_dqn.agent import Agent
-#from torch_dqn.Tensor.agent import Agent
+#from torch_dqn.agent import Agent
+from torch_dqn.Tensor.agent import Agent
 import argparse
 
 np.random.seed(0)
@@ -99,8 +99,8 @@ class Agent():
 
         print(len(r_list))
         plt.plot(r_list)
-        torch.save(agent_torch.qnetwork_local.state_dict(), './models/model.pth')
-        np.save("reward_torch.npy",r_list)
+        #torch.save(agent_torch.qnetwork_local.state_dict(), './models/model.pth')
+        #np.save("reward_torch.npy",r_list)
         plt.show() 
 
 
