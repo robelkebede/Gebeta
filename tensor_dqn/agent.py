@@ -69,17 +69,9 @@ class Agent:
         Q_targets_next = self.target_model.predict(np.array(next_states))
         Q_expected = self.model.predict(np.array(states))
 
-        # Compute Q targets for current states
-        #new Q
         Q_targets = rewards + (gamma * Q_targets_next * (1 - dones))
-        #print(Q_expected) 
-        #Q_expected = Q_expected.reshape((64,6))
 
         actions = [i[0] for i in actions]
-
-        print(Q_targets.shape)
-        print(Q_expected.shape)
-        #print(actions)
 
         Q_expected[actions] = Q_targets
         
