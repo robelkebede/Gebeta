@@ -35,7 +35,7 @@ class Agent():
         action = agent_dqn.act(state)
         return action
    
-   def play_deep_tensor(self,state):
+    def play_deep_tensor(self,state):
         action = agent_dqn.act(state)
         return action
 
@@ -93,12 +93,13 @@ class Agent():
 
         print(len(r_list))
         plt.plot(r_list)
-        np.save("reward_agent.npy",r_list)
+        np.save("reward.npy",r_list)
+        """
         if TORCH is not None:
             torch.save(agent_dqn.qnetwork_local.state_dict(), './models/model_torch.pth')
         else:
             #save model for tensorflow
-            agent_dqn.target_model.save("./models/model_tensor.h5")
+            agent_dqn.target_model.save("./models/model_tensor.h5") """
 
         plt.show() 
 

@@ -34,6 +34,11 @@ cd ./gebeta
 ## Self Play
 ```bash 
 cd ./gebeta	
+
+pytorch
+TORCH=1 ./agent.py --epsodes=[NUM_EPSODES]
+
+tensorflow
 ./agent.py --epsodes=[NUM_EPSODES]
 
 ```

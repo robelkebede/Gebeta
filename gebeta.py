@@ -73,7 +73,9 @@ class Gebeta():
         num_iter = 0
         
         #use while insted of for loop
-        for i in range(1,10000):
+        #for i in range(1,10000): # what if this is while True:
+        i=0
+        while 1:
             num_iter += 1 
             if hole_value == 0:
                 #end game
@@ -97,6 +99,10 @@ class Gebeta():
                 else:
                     board_position[game_pos[i][0],game_pos[i][1]] +=1
                     hole_value -= 1
+
+
+
+            i+=1
 
 
         return  board_position,p0s,p1s,num_iter,game_pos

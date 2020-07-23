@@ -10,6 +10,7 @@ import time
 import numpy as np
 
 UPDATE_EVERY = 4
+LR = 0.001
 BUFFER_SIZE = int(1e5)
 GAMMA = 0.99
 BATCH_SIZE = 64
@@ -31,7 +32,6 @@ class Agent:
         self.target_model = self.create_model(state_size,action_size)
         self.target_model.set_weights(self.model.get_weights())
 
-        #self.replay_memory = deque(maxlen=BUFFER_SIZE)
         self.memory = ReplayBuffer(self.action_size, BUFFER_SIZE, BATCH_SIZE, 0)
         self.tensorboard = TensorBoard(log_dir="logs/{}-{}".format(MODEL_NAME,int(time.time())))
 
@@ -43,7 +43,7 @@ class Agent:
         
         self.memory.add(state, action, reward, next_state, done)
 
-        self.t_step = (self.t_step + 1) % UPDATE_EVERY #what is this
+        self.t_step = (self.t_step + 1) % UPDATE_EVERY 
         if self.t_step == 0:
             if len(self.memory) > BATCH_SIZE:
                 experiences = self.memory.sample()
@@ -65,7 +65,6 @@ class Agent:
 
         states, actions, rewards, next_states, dones = experiences
         
-
         Q_targets_next = self.target_model.predict(np.array(next_states))
         Q_expected = self.model.predict(np.array(states))
 
@@ -78,15 +77,6 @@ class Agent:
         self.model.fit(np.array(states),np.array(Q_expected),
                 batch_size=64,verbose=0,shuffle=False)
 
-        """
-        # Compute loss
-        loss = F.mse_loss(Q_expected, Q_targets)
-        # Minimize the loss
-        self.optimizer.zero_grad()
-        loss.backward()
-        self.optimizer.step() """
-
-        # ------------------- update target network ------------------- # Tensorflow
         self.soft_update(self.model, self.target_model)
 
     def get_qs(self,state,step):
@@ -100,6 +90,8 @@ class Agent:
 
     def create_model(self,state_size,action_size):
 
+        # seed to generate the same random number 
+
         inputs = Input(name='inputs',shape=(state_size,))
         layer = Dense(64,name='FC1')(inputs)
         layer = Activation('relu')(layer)
@@ -108,7 +100,7 @@ class Agent:
 
         layer = Dense(action_size,activation="linear")(layer)
         model = Model(inputs=inputs,outputs=layer)
-        model.compile(loss="mse",optimizer=Adam(lr=0.001),metrics=['accuracy'])
+        model.compile(loss="mse",optimizer=Adam(lr=LR),metrics=['accuracy'])
 
         return model
 
