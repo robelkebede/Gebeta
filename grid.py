@@ -1,12 +1,24 @@
 #! /usr/bin/env python
 
+import os
 import pygame
 import numpy as np
 import time
 from gebeta import Gebeta
 from agent import Agent
 
+model = None
 
+TORCH = os.getenv("TORCH")
+
+if TORCH is not None:
+    import torch
+    model = torch.load("./models/model.pkl")
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+
+else:
+    from keras.models import load_model
+    model = load_model('./models/model.h5')
 
 class GameUI():
 
@@ -44,7 +56,21 @@ class GameUI():
                 self.grid[row].append(0) 
          
         return self.grid
- 
+
+    def model_predict(self,state):
+
+        state = state.reshape(-1)
+        
+        if TORCH is not None:
+
+            state = torch.from_numpy(state).float().unsqueeze(0).to(device)
+            action_values = model(state)
+            return np.argmax(action_values.cpu().data.numpy())
+        else:
+
+            return np.argmax(model.predict([[state]]))
+
+
     
     def render(self):
 
@@ -85,8 +111,7 @@ class GameUI():
 
                             #THIS IS AI
                             time.sleep(1)
-                            #action = agent.play_deep(grid.reshape(-1))
-                            action = np.random.randint(0,5)
+                            action = self.model_predict(self.grid)
                             board_position,p0s,p1s,num_iter,pos = self.gebeta.play(self.grid,0,0,action)
                             
                             score_1.append(p1s)

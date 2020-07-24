@@ -94,12 +94,12 @@ class Agent():
         print(len(r_list))
         plt.plot(r_list)
         np.save("reward.npy",r_list)
-        """
+        
         if TORCH is not None:
-            torch.save(agent_dqn.qnetwork_local.state_dict(), './models/model_torch.pth')
+            torch.save(agent_dqn.qnetwork_local, './models/model.pkl')
         else:
             #save model for tensorflow
-            agent_dqn.target_model.save("./models/model_tensor.h5") """
+            agent_dqn.target_model.save("./models/model_tensor.h5") 
 
         plt.show() 
 
